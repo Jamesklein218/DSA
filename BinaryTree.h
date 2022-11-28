@@ -141,6 +141,15 @@ public:
                 q.push(walker->pRight);
         }
     }
+    bool isBST(Node *p) {
+        if (!p || (!p->pLeft && !p->pRight)) return true;
+        if (p->pLeft && p->pLeft->value >= p->value) return false;
+        if (p->pRight && p->pRight->value < p->value) return false;
+        return isBST(p->pRight) && isBST(p->pLeft);
+    }
+    bool isBST() {
+        return isBST(root);
+    }
 };
 
 #endif //CPPCODEBASECLION_BINARYTREE_H

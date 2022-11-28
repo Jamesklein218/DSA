@@ -82,6 +82,70 @@ public:
         return inOrderRec(this->root);
     }
 
+    bool find(Node *p, T i) {
+        if (!p) return false;
+        if (p->value == i)
+            return true;
+        return find(p->pLeft, i) || find(p->pRight, i);
+    }
+    bool find(T i) {
+        return find(root, i);
+    }
+
+    T sum(Node *p, T l, T r) {
+        if (!p) return 0;
+        int res = 0;
+        if (l <= p->value && p->value <= r)
+            res += p->value;
+        res += sum(p->pLeft, l, r);
+        res += sum(p->pRight, l, r);
+        return res;
+    }
+    T sum(T l, T r) {
+        return sum(root, l, r);
+    }
+
+    T getMin(Node *p) {
+        if (!p->pLeft && !p->pRight) return p->value;
+        T min = p->value;
+        T left, right;
+        if (p->pLeft) {
+            left = getMin(p->pLeft);
+            if (left < min)
+                min = left;
+        }
+        if (p->pRight) {
+            right = getMin(p->pRight);
+            if (right < min)
+                min = right;
+        }
+        return min;
+    }
+    T getMin() {
+        return getMin(root);
+    }
+
+    T getMax(Node *p) {
+        if (!p->pLeft && !p->pRight) return p->value;
+        T max = p->value;
+        T left, right;
+        if (p->pLeft) {
+            left = getMax(p->pLeft);
+            if (left > max)
+                max = left;
+        }
+        if (p->pRight) {
+            right = getMax(p->pRight);
+            if (right > max)
+                max = right;
+        }
+        return max;
+    }
+    T getMax() {
+        return getMax(root);
+    }
+
+
     class Node
     {
     private:
