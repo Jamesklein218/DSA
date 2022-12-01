@@ -80,16 +80,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/khoa/CLionProjects/DSALab/BinarySearchTree.h">
-			<Option target="CppCodeBaseCLion"/>
-		</Unit>
-		<Unit filename="/Users/khoa/CLionProjects/DSALab/BinaryTree.h">
-			<Option target="CppCodeBaseCLion"/>
-		</Unit>
-		<Unit filename="/Users/khoa/CLionProjects/DSALab/SLinkedList.h">
-			<Option target="CppCodeBaseCLion"/>
-		</Unit>
-		<Unit filename="/Users/khoa/CLionProjects/DSALab/Sorting.h">
+		<Unit filename="/Users/khoa/CLionProjects/DSALab/AVLTree.h">
 			<Option target="CppCodeBaseCLion"/>
 		</Unit>
 		<Unit filename="/Users/khoa/CLionProjects/DSALab/main.cpp">

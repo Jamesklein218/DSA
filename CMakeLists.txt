@@ -3,4 +3,4 @@ project(DSALab)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(CppCodeBaseCLion main.cpp SLinkedList.h Sorting.h BinarySearchTree.h BinaryTree.h)
+add_executable(CppCodeBaseCLion main.cpp AVLTree.h)
