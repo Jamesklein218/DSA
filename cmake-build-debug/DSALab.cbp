@@ -80,9 +80,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/khoa/CLionProjects/DSALab/AVLTree.h">
-			<Option target="CppCodeBaseCLion"/>
-		</Unit>
 		<Unit filename="/Users/khoa/CLionProjects/DSALab/main.cpp">
 			<Option target="CppCodeBaseCLion"/>
 		</Unit>
