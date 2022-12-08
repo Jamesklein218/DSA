@@ -125,7 +125,7 @@ void reheapDown(int maxHeap[], int numberOfElements, int index) {
             leftIndex++;
         if (maxHeap[index] > maxHeap[leftIndex]) break;
 
-        std::swap(maxHeap[index], maxHeap[leftIndex]);
+        swap(maxHeap[index], maxHeap[leftIndex]);
 
         index = leftIndex;
         leftIndex = (index << 1) + 1;
@@ -143,15 +143,16 @@ void reheapUp(int maxHeap[], int numberOfElements, int index) {
     }
 }
 
-// Exercise 4: 0.9/10
+// Exercise 4: 0.9/1
 template<class T>
 void Heap<T>::remove(T item) {
     int index = getItem(item);
     if (index == -1) return;
     swap(elements[index], elements[count - 1]);
     count--;
-    reheapDown(index);
-    reheapUp(index);
+    for (int i = count / 2 - 1; i >= 0; i--)
+        reheapDown(i);
+
 }
 
 template<class T>
@@ -311,10 +312,150 @@ int nthSuperUglyNumber(int n, vector<int>& primes) {
     return dp[n - 1];
 }
 
+/*
+ * HASH AND SEARCH
+ */
+
+// Exercise 1: Author: Khang Phung
+int foldShift(long long key, int addressSize)
+{
+    int sum = 0;
+    string Skey = std::to_string(key);
+    int size = Skey.size();
+    for (int i = 0; i < size; i += addressSize)
+    {
+        string s = Skey.substr(i, addressSize);
+        sum += std::stoi(s);
+    }
+    int modulo = pow(10, addressSize);
+    return sum % modulo;
+}
+
+int rotation(long long key, int addressSize)
+{
+    string s = std::to_string(key);
+    string last = s.substr(s.size() - 1);
+    s.pop_back();
+    s = last + s;
+    int mod = pow(10, addressSize);
+    return foldShift(std::stoll(s), addressSize) % mod;
+}
+// Exercise 2
+long int midSquare(long int seed)
+{
+    long int square = seed * seed;
+    long int res = 0;
+    square /= 10;
+    square /= 10;
+    res += (square % 10);
+    square /= 10;
+    res += (square % 10) * 10;
+    square /= 10;
+    res += (square % 10) * 100;
+    square /= 10;
+    res += (square % 10) * 1000;
+    square /= 10;
+    return res;
+}
+long int moduloDivision(long int seed, long int mod)
+{
+    return seed % mod;
+}
+long int digitExtraction(long int seed,int* extractDigits,int size)
+{
+    string seedstr = to_string(seed);
+    long int res = 0;
+    for (int i = 0; i < size; i++) {
+        res *= 10;
+        res += (long int)(seedstr[extractDigits[i]] - '0');
+    }
+
+    return res;
+}
+// Exercise 3
+int pairMatching(vector<int>& nums, int target) {
+    sort(nums.begin(), nums.end());
+    int l = 0, r = nums.size() - 1;
+    int count = 0;
+    while (l < r) {
+        if (nums[l] + nums[r] < target)
+            l++;
+        else if (nums[l] + nums[r] > target)
+            r--;
+        else {
+            count++;
+            l++;
+            r--;
+        }
+    }
+    return count;
+}
+
+// Exercise 4
+// Recursive
+int binarySearchRec(int arr[], int left, int right, int x) {
+    if (left > right) return -1;
+    int mid = (left + right) / 2;
+
+    cout << "We traverse on index: " << mid << endl;
+    if (arr[mid] == x)
+        return mid;
+    else if (x < arr[mid])
+        return binarySearchRec(arr, left, mid - 1, x);
+    return binarySearchRec(arr, mid + 1, right, x);
+}
+// Iterative
+int binarySearch(int arr[], int left, int right, int x) {
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        cout << "We traverse on index: " << mid << endl;
+        if (arr[mid] == x)
+            return mid;
+        else if (x < arr[mid])
+            right = mid - 1;
+        left = mid + 1;
+    }
+    return -1;
+}
+
+// Exercise 5
+bool findPairs(int arr[], int n, pair<int,int>& pair1, pair<int, int>& pair2)
+{
+    map<int, pair<int, int> > m;
+    for (int i= 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (m.find(arr[i] + arr[j]) != m.end()) {
+                pair1 = m[arr[i] + arr[j]];
+                pair2 = pair<int, int>(arr[i], arr[j]);
+                return true;
+            } else
+                m.insert(pair<int, pair<int, int> >(arr[i] + arr[j], pair<int, int> (arr[i], arr[j])));
+        }
+    }
+    return false;
+}
+
+// Exercise 6
+int interpolationSearch(int arr[], int left, int right, int x)
+{
+    if (left > right || x < arr[left] || x > arr[right]) return -1;
+    int pos = left + (((double) (right - left) / (arr[right] - arr[left])) * (x - arr[left]));
+
+    cout << "We traverse on index: " << pos << endl;
+    if (arr[pos] == x)
+        return pos;
+    else if (x < arr[pos])
+        return interpolationSearch(arr, left, pos - 1, x);
+    return interpolationSearch(arr, pos + 1, right, x);
+}
 
 int main() {
-    int n = 5000;
-    cout << uglyNumberIndex(n);
+    int arr[] = { 1,2,3,4,5,6,7,8,9 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int x = 0;
+    int result = interpolationSearch(arr, 0, n - 1, x);
+    (result == -1) ? cout << "Element is not present in array"
+                   : cout << "Element is present at index " << result;
 
     return 0;
 }
