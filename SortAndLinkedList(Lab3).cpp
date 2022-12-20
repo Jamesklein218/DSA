@@ -218,8 +218,6 @@ int greatAncestor(BTNode* root) {
     return count;
 }
 
-
-
 // UNSOLVED
 int longestPathSum(BTNode* root) {
     if (!root) return 0;

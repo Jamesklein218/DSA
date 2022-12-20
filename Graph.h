@@ -6,6 +6,7 @@
 #define DSALAB_GRAPH_H
 
 #include <vector>
+#include <list>
 #include <queue>
 #include <stack>
 #include <functional>
@@ -40,6 +41,8 @@ protected:
 
     std::vector<Vertex>  G;
 public:
+    size_t E;
+public:
     Graph() {}
     int insertVertex(T data) {
         Vertex newVertex{G.size(), data, std::vector<Edge>(), 0, 0};
@@ -53,15 +56,22 @@ public:
             Edge newEdge {weight, fromKey};
             G[toKey].edgeList.push_back(newEdge);
         }
+        E++;
     }
 
     /*
      * Breadth-First Search (BFS)
      *
+     * Breadth first search is one of the basic and essential searching algorithms on graphs.
+     * As a result of how the algorithm works, the path found by breadth first search to any
+     * node is the shortest path to that node, i.e the path that contains the smallest number
+     * of edges in unweighted graphs.
      *
+     * Time complexity: O(V + E)
+     *
+     * Note: clear vertex information before use if your want to start from the beginning
      */
     std::vector<int> BFS(std::function<void (const T & data)> op, int source = 0) {
-        clearVertex();
         std::vector<int> path(G.size(), -1);
         std::queue<int> q;
         q.push(source);
@@ -85,8 +95,20 @@ public:
         return path;
     }
 
-    std::vector<int> DFS(std::function<void (const T & data)> op, int source = 0) {
-        clearVertex();
+    /*
+     * Depth-First Search (Stack Iteration Implementation)
+     *
+     * Depth First Search is one of the main graph algorithms.
+     * Depth First Search finds the lexicographical first path in the
+     * graph from a source vertex u to each vertex. Depth First Search
+     * will also find the shortest paths in a tree (because there only
+     * exists one simple path), but on general graphs this is not the case.
+     *
+     * Time complexity: O(V + E)
+     *
+     * Note: clear vertex information before use if your want to start from the beginning
+     */
+    std::vector<int> DFSPreOrder(std::function<void (const T & data)> op, int source = 0) {
         std::vector<int> path(G.size(), -1);
         std::stack<int> s;
         s.push(source);
@@ -105,15 +127,42 @@ public:
                     path[currentEdge.vertexIndex]   = currentVertexIdx;
                 }
             }
-
         }
         return path;
+    }
+
+    /*
+     * Depth-First Search (Recursion Implementation)
+     *
+     * Depth First Search is one of the main graph algorithms.
+     * Depth First Search finds the lexicographical first path in the
+     * graph from a source vertex u to each vertex. Depth First Search
+     * will also find the shortest paths in a tree (because there only
+     * exists one simple path), but on general graphs this is not the case.
+     *
+     * Time complexity: O(V + E)
+     *
+     * Note: clear vertex information before use if your want to start from the beginning
+     */
+    std::vector<int> DFSPostOrder(std::function<void (const T & data)> op, int source = 0) {
+        // TODO
     }
 
     struct option {
         bool operator()(Vertex &a, Vertex &b) { return a.dist > b.dist; }
     };
 
+    /*
+     * Shortest Paths Problem (Single-sourced): Djikstra's algorithm
+     *
+     * Shortest Paths Problem is finding the shortest path between two vertices.
+     * The algorithm only describe how to get the shortest path from one source
+     * to another with the condition of all weights must be POSITIVE.
+     *
+     * Time complexity:
+     * List, Array Implementation: O(V^2)
+     * Priority Queue Implementation: O(E logV)
+     */
     std::vector<int> Djikstra(int fromKey, int toKey) {
         clearVertex();
         std::vector<int> path(G.size(), -1);
@@ -136,6 +185,30 @@ public:
         return path;
     }
 
+    /*
+     * Topological Sort
+     *
+     * @return an array of Vertex in topological order
+     *
+     * Algorithm:
+     *      1.  call DFS to compute the finishing time of v * f for each v
+     *      2.  as each vertex is finished, add to the head of the list
+     *      3.  return the list
+     */
+    vector<T> topologicalSort() {
+        clearVertex();
+        vector<T> result;
+        for (size_t i = 0; i < G.size(); i++) {
+            if (G[i].flag == false) {
+                DFSPostOrder([&result](const T& data) {
+                    result.push_back(data);
+                }, i);
+            }
+        }
+
+        return result;
+    }
+
     void clearVertex() {
        for (size_t i = 0; i < G.size(); i++) {
            G[i].flag = false;
@@ -148,8 +221,9 @@ public:
             for (size_t j = 0; j < G[i].edgeList.size(); j++) {
                 std::cout << G[G[i].edgeList[j].vertexIndex].data << ",";
             }
-            std::cout << "]" << '\n';
+            std::cout << "] " << (G[i].flag == true ? "visited" : "not visited") << '\n';
         }
+        std::cout << std::endl;
     }
 };
 

@@ -18,8 +18,20 @@ using namespace std;
 /*
  * Implementation of Heap
  *
+ * A Heap is a special Tree-based data structure in which the tree is a complete binary tree.
+ * Its implementation:
+ * Node[i]
+ * Parent: [(i - 1) / 2]
+ * Left: i * 2 + 1
+ * Right: i * 2 + 2
+ * HeapUp(): O(logN)
+ * HeapDown(): O(logN)
+ * Build a Heap -> O(N) not O(logN)
+ * Insert a Node: O(logN)
+ * Pop: O(logN)
  *
- */
+ * Detail Implementation in lab5.cpp
+ * */
 template<class T>
 class Heap {
 protected:
