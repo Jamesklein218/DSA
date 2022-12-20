@@ -7,6 +7,8 @@
 
 #include<iostream>
 #include<string>
+#include <queue>
+
 using namespace std;
 
 template<class K, class V>

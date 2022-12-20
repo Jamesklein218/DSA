@@ -10,16 +10,28 @@
 #include <stack>
 #include <functional>
 
+
+/*
+ * Implementation of Graph data structure
+ *
+ * A graph consists of two small data structure called Vertex and Edge.
+ * A graph list is basically an array of vertices (strucuture Vertex). Each
+ * vertex will store its adjacent edges in a list. This method is called
+ * adjacency list. There is also two other method of storing which is
+ * adjacency matrix and edge list.
+ */
 template <class T = int, class W = int, bool direct = true>
 class Graph {
 protected:
-    struct Edge {
+    class Edge {
+    public:
         W   weight;
         int vertexIndex;
     };
 
-    struct Vertex {
-        size_t                 key;
+    class Vertex {
+    public:
+        size_t              key;
         T                   data;
         std::vector<Edge>   edgeList;
         bool                flag;
@@ -42,6 +54,12 @@ public:
             G[toKey].edgeList.push_back(newEdge);
         }
     }
+
+    /*
+     * Breadth-First Search (BFS)
+     *
+     *
+     */
     std::vector<int> BFS(std::function<void (const T & data)> op, int source = 0) {
         clearVertex();
         std::vector<int> path(G.size(), -1);

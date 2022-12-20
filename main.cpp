@@ -1,6 +1,8 @@
 #include "main.h"
 
 #include "Graph.h"
+#include "DLinkedList.h"
+#include "Sorting.h"
 
 using namespace std;
 
@@ -33,5 +35,6 @@ int main() {
     for (int i = 0; i < path.size(); i++) {
         cout << path[i] << "\t";
     }
+
     return 0;
 }

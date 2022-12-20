@@ -14,6 +14,12 @@
 #include <algorithm>
 using namespace std;
 #define SEPARATOR "#<ab@17943918#@>#"
+
+/*
+ * Implementation of Heap
+ *
+ *
+ */
 template<class T>
 class Heap {
 protected:
