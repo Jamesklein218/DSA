@@ -5,6 +5,7 @@
 #ifndef DSALAB_GRAPH_H
 #define DSALAB_GRAPH_H
 
+#include <iostream>
 #include <vector>
 #include <list>
 #include <queue>
@@ -64,8 +65,12 @@ public:
      *
      * Breadth first search is one of the basic and essential searching algorithms on graphs.
      * As a result of how the algorithm works, the path found by breadth first search to any
-     * node is the shortest path to that node, i.e the path that contains the smallest number
+     * node is the shortest path to that node, i.e. the path that contains the smallest number
      * of edges in unweighted graphs.
+     *
+     * @param {function} op A function to operator in Breath-First order
+     * @param {number} source The source vertex
+     * @return {vector} An array representing the shortest path from source to every vertex
      *
      * Time complexity: O(V + E)
      *
@@ -103,6 +108,10 @@ public:
      * graph from a source vertex u to each vertex. Depth First Search
      * will also find the shortest paths in a tree (because there only
      * exists one simple path), but on general graphs this is not the case.
+     *
+     * @param {function} op A function to operator in Depth-First order
+     * @param {number} source The source vertex
+     * @return {vector} An array representing the shortest path from source to every vertex
      *
      * Time complexity: O(V + E)
      *
@@ -148,7 +157,7 @@ public:
         // TODO
     }
 
-    struct option {
+    struct sort_option {
         bool operator()(Vertex &a, Vertex &b) { return a.dist > b.dist; }
     };
 
@@ -159,6 +168,10 @@ public:
      * The algorithm only describe how to get the shortest path from one source
      * to another with the condition of all weights must be POSITIVE.
      *
+     * @param {number} fromKey The index of the initial vertex
+     * @param {number} toKey The index of the destination vertex
+     * @return {array} an array representing all shortest paths from any vertex to the 'toKey' vertex
+     *
      * Time complexity:
      * List, Array Implementation: O(V^2)
      * Priority Queue Implementation: O(E logV)
@@ -166,7 +179,7 @@ public:
     std::vector<int> Djikstra(int fromKey, int toKey) {
         clearVertex();
         std::vector<int> path(G.size(), -1);
-        std::priority_queue<Vertex, std::vector<Vertex>, option> pq;
+        std::priority_queue<Vertex, std::vector<Vertex>, sort_option> pq;
         G[fromKey].dist = 0;
         pq.push(G[fromKey]);
         while (pq.empty() == false) {
@@ -188,16 +201,16 @@ public:
     /*
      * Topological Sort
      *
-     * @return an array of Vertex in topological order
+     * @return {array} An array of Vertex in topological order
      *
      * Algorithm:
      *      1.  call DFS to compute the finishing time of v * f for each v
      *      2.  as each vertex is finished, add to the head of the list
      *      3.  return the list
      */
-    vector<T> topologicalSort() {
+    std::vector<T> topologicalSort() {
         clearVertex();
-        vector<T> result;
+        std::vector<T> result;
         for (size_t i = 0; i < G.size(); i++) {
             if (G[i].flag == false) {
                 DFSPostOrder([&result](const T& data) {

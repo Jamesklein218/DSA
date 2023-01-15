@@ -1,72 +1,53 @@
 #include "main.h"
 
-#include "BinaryTree.h"
-#include "BinarySearchTree.h"
-#include "BTree.h"
-#include "DLinkedList.h"
-#include "Graph.h"
-#include "HashMap.h"
-#include "Heap.h"
-#include "SplayTree.h"
-#include "Sorting.h"
-
 using namespace std;
+class Solution {
+public:
+    static vector<int> getOrder(vector<vector<int>>& tasks) {
+        for (int i = 0; i < tasks.size(); i++) tasks[i].push_back(i);
 
-void test_djkstra() {
-    Graph<int, int, true> g;
+        auto sort_cmp = [](const vector<int> &a, const vector<int> &b) {
+            return a[0] < b[0];
+        };
+        auto pq_cmp = [](const vector<int> &a, const vector<int> &b) {
+            return a[1] > b[1];
+        };
 
-    for (int i = 0; i < 6; i++)
-        g.insertVertex(i);
+        vector<int> res;
 
-    g.insertEdge(0, 1, 1);
-    g.insertEdge(1, 2, 5);
-    g.insertEdge(1, 3, 2);
-    g.insertEdge(1, 5, 7);
-    g.insertEdge(2, 5, 1);
-    g.insertEdge(3, 0, 2);
-    g.insertEdge(3, 2, 1);
-    g.insertEdge(3, 4, 4);
-    g.insertEdge(4, 3, 3);
-    g.insertEdge(5, 4, 1);
+        sort(tasks.begin(), tasks.end(), sort_cmp);
 
-    vector<int> path = g.Djikstra(0, 5);
+        priority_queue<vector<int>, vector<vector<int> >, decltype(pq_cmp)> pq ( pq_cmp);
 
-    for (int i = 0; i < path.size(); i++) {
-        cout << i << "\t";
+        int p = 0;
+        int time = 0;
+
+        while (p < tasks.size() || !pq.empty()) {
+            while (p < tasks.size() && tasks[p][0] <= time) {
+                pq.push(tasks[p++]);
+            }
+            if (pq.empty()) time++;
+            else {
+                vector<int> todo = pq.top();
+                pq.pop();
+                time += todo[1];
+                res.push_back(todo[2]);
+            }
+        }
+        return res;
     }
-    cout << endl;
-    for (int i = 0; i < path.size(); i++) {
-        cout << path[i] << "\t";
-    }
-}
-
-void topo_sort_test() {
-    Graph<int> g;
-
-    for (int i = 0; i < 8; i++)
-        g.insertVertex(i);
-
-    g.insertEdge(0, 1);
-    g.insertEdge(1, 2);
-    g.insertEdge(1, 5);
-    g.insertEdge(1, 6);
-    g.insertEdge(3, 5);
-    g.insertEdge(3, 7);
-    g.insertEdge(4, 1);
-    g.insertEdge(4, 7);
-    g.insertEdge(7, 6);
-
-    vector<int> topo = g.topologicalSort();
-
-    for (int i = 0; i < topo.size(); i++)
-        cout << topo[i] << " ";
-}
-
+};
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-
-    topo_sort_test();
-
+    vector<vector<int> > input{
+            {7, 10},
+            {7, 12},
+            {7, 4},
+            {7, 5},
+            {7, 2}
+    };
+    vector<int> res = Solution::getOrder(input);
+    for (int i = 0; i < res.size(); i++) {
+        cout << res[i] << " ";
+    }
     return 0;
 }
